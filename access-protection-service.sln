@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "access_protection_service", "src\access_protection_service.csproj", "{F17C3DF9-864F-4D72-82F3-08AB1C0DC7E9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "access_protection_service-tests", "tests\access_protection_service-tests.csproj", "{6A9B8ED2-A37A-45DC-89B2-E7C44F5C6587}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "access_protection_service_tests", "tests\access_protection_service_tests.csproj", "{6A9B8ED2-A37A-45DC-89B2-E7C44F5C6587}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
