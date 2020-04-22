@@ -8,7 +8,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using StockportGovUK.AspNetCore.Middleware;
 using StockportGovUK.AspNetCore.Availability;
-using StockportGovUK.AspNetCore.Availability.Middleware;
 using StockportGovUK.NetStandard.Gateways;
 using Swashbuckle.AspNetCore.Swagger;
 
@@ -27,10 +26,10 @@ namespace access_protection_service
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc().AddMvcOptions(_ => _.AllowEmptyInputInBodyModelBinding = true);
+            
             services.AddHealthChecks()
-                .AddCheck<TestHealthCheck>("TestHealthCheck");
-            services.AddAvailability();
-            services.AddResilientHttpClients<IGateway, Gateway>(Configuration);
+                .AddCheck<TestHealthCheck>("TestHealthCheck");                      
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Info { Title = "access_protection_service API", Version = "v1" });
@@ -46,6 +45,9 @@ namespace access_protection_service
                     {"Bearer", new string[] { }},
                 });
             });
+  
+            services.AddAvailability();
+            services.AddResilientHttpClients<IGateway, Gateway>(Configuration);
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -57,11 +59,10 @@ namespace access_protection_service
             else
             {
                 app.UseHsts();
+                app.UseHttpsRedirection();
             }
-            
-            app.UseMiddleware<Availability>();
-            app.UseMiddleware<ExceptionHandling>();
-            app.UseHttpsRedirection();
+                       
+            app.UseMiddleware<ExceptionHandling>();           
             app.UseHealthChecks("/healthcheck", HealthCheckConfig.Options);
             app.UseMvc();
             app.UseSwagger();

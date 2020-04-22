@@ -1,9 +1,11 @@
-using System.Threading.Tasks;
-using access_protection_service.Utils.Toggles;
+using access_protection_service.Models;
+using access_protection_service.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using StockportGovUK.AspNetCore.Attributes.TokenAuthentication;
-using StockportGovUK.AspNetCore.Availability.Attributes;
-using StockportGovUK.AspNetCore.Availability.Managers;
+using System;
+using System.Threading.Tasks;
 
 namespace access_protection_service.Controllers
 {
@@ -11,29 +13,39 @@ namespace access_protection_service.Controllers
     [Route("api/v1/[Controller]")]
     [ApiController]
     [TokenAuthentication]
-    //[OperationalToggle(OperationalToggles.access_protection_service)]
     public class HomeController : ControllerBase
     {
-        private IAvailabilityManager _availabilityManager;
-
-        
-        public HomeController(IAvailabilityManager availabilityManager)
+        private readonly ILogger<HomeController> _logger;
+        private readonly IAccessProtectionService _accessProtectionService;
+    
+        public HomeController(ILogger<HomeController> logger, IAccessProtectionService accessProtectionService)
         {
-            _availabilityManager = availabilityManager;
+            _logger = logger;
+            _accessProtectionService = accessProtectionService;
         }
 
         [HttpGet]
-        // [FeatureToggle(FeatureToggles.MyToggle)]
         public IActionResult Get()
         {
-            return Ok();
+            return Ok(); 
         }
-
+        
         [HttpPost]
-        // [FeatureToggle(FeatureToggles.MyToggle)]
-        public IActionResult Post()
+        public async Task<IActionResult> Post([FromBody] AccessProtectionMarkingsRequest accessProtectionMarkingsRequest)
         {
-            return Ok();
+            _logger.LogDebug(JsonConvert.SerializeObject(accessProtectionMarkingsRequest));
+
+            try
+            {
+                var result = await _accessProtectionService.CreateCase(accessProtectionMarkingsRequest);
+                _logger.LogWarning($"Case result: { result }");
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning($"Case an exception has occurred while calling CreateCase, ex: {ex}");
+                return StatusCode(500, ex);
+            }
         }
     }
 }

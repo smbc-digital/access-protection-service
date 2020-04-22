@@ -26,4 +26,8 @@
     <ProjectReference Include="..\src\access_protection_service.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controller\" />
+  </ItemGroup>
+
 </Project>
