@@ -65,9 +65,12 @@ namespace access_protection_service
             app.UseHealthChecks("/healthcheck", HealthCheckConfig.Options);
             app.UseMvc();
             app.UseSwagger();
+
+            var swaggerPrefix = (env.EnvironmentName == "local" || env.EnvironmentName == "Development") ? string.Empty : "/accessprotectionservice";
+
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "access_protection_service API");
+                c.SwaggerEndpoint($"{swaggerPrefix}/swagger/v1/swagger.json", "access_protection_service API");
             });
         }
     }
