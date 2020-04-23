@@ -10,6 +10,7 @@ using StockportGovUK.AspNetCore.Middleware;
 using StockportGovUK.AspNetCore.Availability;
 using StockportGovUK.NetStandard.Gateways;
 using Swashbuckle.AspNetCore.Swagger;
+using access_protection_service.Services;
 
 namespace access_protection_service
 {
@@ -48,6 +49,7 @@ namespace access_protection_service
   
             services.AddAvailability();
             services.AddResilientHttpClients<IGateway, Gateway>(Configuration);
+            services.AddTransient<IAccessProtectionService, AccessProtectionService>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

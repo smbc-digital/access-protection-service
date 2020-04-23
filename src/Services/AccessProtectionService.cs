@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace access_protection_service.Services
 {
-    public class AccessProtectionService
+    public class AccessProtectionService : IAccessProtectionService
     {
         private readonly IVerintServiceGateway _VerintServiceGateway;
 
