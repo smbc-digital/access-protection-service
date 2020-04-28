@@ -4,7 +4,7 @@ using System.Reflection;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Newtonsoft.Json;
+using System.Text.Json;
 
 namespace access_protection_service.Utils.HealthChecks
 {
@@ -34,7 +34,7 @@ namespace access_protection_service.Utils.HealthChecks
 
         private static string ProcessUnhealthy(HealthReport report)
         {
-            return JsonConvert.SerializeObject(new
+            return JsonSerializer.Serialize(new
                 {
                     application = new {
                         name = _assembly.Name,
@@ -55,7 +55,7 @@ namespace access_protection_service.Utils.HealthChecks
 
         private static string ProcessHealthy(HealthReport report)
         {
-            return JsonConvert.SerializeObject(new
+            return JsonSerializer.Serialize(new
                 {
                     application = new {
                         name = _assembly.Name,
