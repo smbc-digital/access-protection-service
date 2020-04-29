@@ -16,7 +16,7 @@ namespace access_protection_service.Utils.ServiceCollectionExtensions
         {
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "access_protection_service API", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Access protection service API", Version = "v1" });
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     Name = "Authorization",
