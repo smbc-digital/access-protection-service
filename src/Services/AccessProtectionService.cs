@@ -21,15 +21,16 @@ namespace access_protection_service.Services
                                 LastName: { accessProtectionMarkingsRequest.LastName}
                                 Email: {accessProtectionMarkingsRequest.Email}
                                 Phone: {accessProtectionMarkingsRequest.Phone}
-                                FurtherLlocationDetails {accessProtectionMarkingsRequest.FurtherLocationDetails}";
+                                FurtherLlocationDetails: {accessProtectionMarkingsRequest.FurtherLocationDetails}";
 
             if (accessProtectionMarkingsRequest.CustomersAddress != null)
             {
                 description += $@"AddressLine1: {accessProtectionMarkingsRequest.CustomersAddress.AddressLine1}
                                 AddressLine2: {accessProtectionMarkingsRequest.CustomersAddress.AddressLine2}
                                 Town: {accessProtectionMarkingsRequest.CustomersAddress.Town}
-                                Postcode; {accessProtectionMarkingsRequest.CustomersAddress.Postcode}
-                                SelectedAddress: {accessProtectionMarkingsRequest.CustomersAddress.SelectedAddress}";
+                                Postcode: {accessProtectionMarkingsRequest.CustomersAddress.Postcode}
+                                SelectedAddress: {accessProtectionMarkingsRequest.CustomersAddress.SelectedAddress}
+                                ";
             }
 
             var crmCase = new Case
