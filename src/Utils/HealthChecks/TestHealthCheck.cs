@@ -9,7 +9,7 @@ namespace access_protection_service.Utils.HealthChecks
     {
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
-            return await Task.FromResult(HealthCheckResult.Healthy(null, new Dictionary<string, object> {{"Result", "All working!"}}));
+            return HealthCheckResult.Healthy(null, new Dictionary<string, object> {{"Result", "All working!"}});
         }
     }
 }
