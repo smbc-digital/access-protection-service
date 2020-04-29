@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using System.Collections.Generic;
 using access_protection_service.Utils.ServiceCollectionExtensions;
 using access_protection_service.Utils.HealthChecks;
 using Microsoft.AspNetCore.Builder;
@@ -25,14 +24,14 @@ namespace access_protection_service
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().AddMvcOptions(_ => _.AllowEmptyInputInBodyModelBinding = true);
-            services.AddSwagger();
-            
-            services.AddHealthChecks()
-                .AddCheck<TestHealthCheck>("TestHealthCheck");                      
-            
-            services.AddAvailability();
+            services.AddControllers()
+                    .AddMvcOptions(_ => _.AllowEmptyInputInBodyModelBinding = true);
             services.AddResilientHttpClients<IGateway, Gateway>(Configuration);
+            services.AddAvailability();
+            services.AddSwagger();
+            services.AddHealthChecks()
+                    .AddCheck<TestHealthCheck>("TestHealthCheck");
+                    
             services.RegisterServices();
         }
 
@@ -47,17 +46,18 @@ namespace access_protection_service
                 app.UseHsts();
                 app.UseHttpsRedirection();
             }
+
             app.UseRouting();
             app.UseEndpoints(endpoints => endpoints.MapControllers());
-            app.UseMiddleware<ExceptionHandling>();           
+
+            app.UseMiddleware<ExceptionHandling>();          
+
             app.UseHealthChecks("/healthcheck", HealthCheckConfig.Options);
+
             app.UseSwagger();
-
-            var swaggerPrefix = (env.IsEnvironment("local") || env.IsEnvironment("Development") ? string.Empty : "/accessprotectionservice");
-
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint($"{swaggerPrefix}/swagger/v1/swagger.json", "access_protection_service API");
+                c.SwaggerEndpoint($"{(env.IsEnvironment("local") ? string.Empty : "/accessprotectionservice")}/swagger/v1/swagger.json", "Access protection service API");
             });
         }
     }
