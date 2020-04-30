@@ -85,7 +85,6 @@ namespace access_protection_service.Services
             try
             {
                 var response = await _VerintServiceGateway.CreateCase(crmCase);
-                //_logger.LogError(JsonConvert.SerializeObject(response));
 
                 if (!response.IsSuccessStatusCode)
                 {
