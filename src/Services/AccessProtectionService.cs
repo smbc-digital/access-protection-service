@@ -2,9 +2,7 @@
 using access_protection_service.Models;
 using StockportGovUK.NetStandard.Gateways.VerintServiceGateway;
 using StockportGovUK.NetStandard.Models.Verint;
-using StockportGovUK.NetStandard.Models.Verint.Update;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace access_protection_service.Services
@@ -87,33 +85,12 @@ namespace access_protection_service.Services
             try
             {
                 var response = await _VerintServiceGateway.CreateCase(crmCase);
+                //_logger.LogError(JsonConvert.SerializeObject(response));
 
                 if (!response.IsSuccessStatusCode)
                 {
                     throw new Exception("Status code not successful");
                 }
-
-                var updateCaseRequest = new IntegrationFormFieldsUpdateModel
-                {
-                    CaseReference = response.ResponseContent,
-                    IntegrationFormName = "testForm",
-                    IntegrationFormFields = new List<IntegrationFormField>
-                    {
-                        new IntegrationFormField 
-                        {
-                            FormFieldName = "fieldName",
-                            FormFieldValue = "fieldValue"
-                        }
-                    }
-                };
-
-                var updateResponse = await _VerintServiceGateway.UpdateCaseIntegrationFormField(updateCaseRequest);
-
-                if (!updateResponse.IsSuccessStatusCode)
-                {
-                    throw new Exception($"UpdateCaseIntegrationFormField:: Recieved unsuccessful StatusCode: {updateResponse.StatusCode}");
-                }
-
 
                 return response.ResponseContent;
             }
