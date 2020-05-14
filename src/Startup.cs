@@ -5,9 +5,10 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using StockportGovUK.AspNetCore.Middleware;
-using StockportGovUK.NetStandard.Gateways;
 using Microsoft.Extensions.Hosting;
+using StockportGovUK.AspNetCore.Middleware;
+using StockportGovUK.AspNetCore.Availability.Middleware;
+using StockportGovUK.NetStandard.Gateways;
 
 namespace access_protection_service
 {
@@ -24,6 +25,7 @@ namespace access_protection_service
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers()
+                    .AddNewtonsoftJson()
                     .AddMvcOptions(_ => _.AllowEmptyInputInBodyModelBinding = true);
             services.AddResilientHttpClients<IGateway, Gateway>(Configuration);
             services.AddSwagger();
@@ -47,7 +49,8 @@ namespace access_protection_service
             app.UseRouting();
             app.UseEndpoints(endpoints => endpoints.MapControllers());
 
-            app.UseMiddleware<ExceptionHandling>();          
+            app.UseMiddleware<Availability>();
+            app.UseMiddleware<ApiExceptionHandling>();          
 
             app.UseHealthChecks("/healthcheck", HealthCheckConfig.Options);
 

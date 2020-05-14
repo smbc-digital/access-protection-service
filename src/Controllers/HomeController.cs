@@ -2,9 +2,9 @@ using access_protection_service.Models;
 using access_protection_service.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using StockportGovUK.AspNetCore.Attributes.TokenAuthentication;
 using System;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace access_protection_service.Controllers
@@ -27,11 +27,13 @@ namespace access_protection_service.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] AccessProtectionMarkingsRequest accessProtectionMarkingsRequest)
         {
-            _logger.LogDebug(JsonSerializer.Serialize(accessProtectionMarkingsRequest));
+            _logger.LogDebug(JsonConvert.SerializeObject(accessProtectionMarkingsRequest));
+
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
+
             try
             {
                 var result = await _accessProtectionService.CreateCase(accessProtectionMarkingsRequest);
