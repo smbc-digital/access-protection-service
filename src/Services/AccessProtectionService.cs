@@ -86,16 +86,14 @@ namespace access_protection_service.Services
             {
                 var response = await _VerintServiceGateway.CreateCase(crmCase);
 
-                if (!response.IsSuccessStatusCode)
-                {
-                    throw new Exception("Status code not successful");
-                }
-
+                if (!response.IsSuccessStatusCode)       
+                    throw new Exception($"AccessProtectionService CreateCase VerintServiceGateway responded with status code {response.StatusCode}");      
+                
                 return response.ResponseContent;
             }
             catch (Exception ex)
             {
-                throw new Exception($"CRMService CreateCase an exception has occured while creating the case in verint service", ex);
+                throw new Exception($"AccessProtectionService CreateCase an exception has occured while creating the case in verint service", ex);
             }
         }
     }

@@ -23,18 +23,15 @@ namespace access_protection_service.Controllers
             _logger = logger;
             _accessProtectionService = accessProtectionService;
         }
-
-        [HttpGet]
-        public IActionResult Get()
-        {
-            return Ok(); 
-        }
         
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] AccessProtectionMarkingsRequest accessProtectionMarkingsRequest)
         {
             _logger.LogDebug(JsonSerializer.Serialize(accessProtectionMarkingsRequest));
-
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
             try
             {
                 var result = await _accessProtectionService.CreateCase(accessProtectionMarkingsRequest);
@@ -43,8 +40,8 @@ namespace access_protection_service.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogWarning($"Case an exception has occurred while calling CreateCase, ex: {ex}");
-                return StatusCode(500, ex);
+                _logger.LogWarning($"HomeContoller:Post, Case an exception has occurred while calling CreateCase, ex: {ex}");
+                return StatusCode(500);
             }
         }
     }

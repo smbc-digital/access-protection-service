@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using StockportGovUK.AspNetCore.Middleware;
-using StockportGovUK.AspNetCore.Availability;
 using StockportGovUK.NetStandard.Gateways;
 using Microsoft.Extensions.Hosting;
 
@@ -27,11 +26,9 @@ namespace access_protection_service
             services.AddControllers()
                     .AddMvcOptions(_ => _.AllowEmptyInputInBodyModelBinding = true);
             services.AddResilientHttpClients<IGateway, Gateway>(Configuration);
-            services.AddAvailability();
             services.AddSwagger();
             services.AddHealthChecks()
-                    .AddCheck<TestHealthCheck>("TestHealthCheck");
-                    
+                    .AddCheck<TestHealthCheck>("TestHealthCheck");               
             services.RegisterServices();
         }
 
