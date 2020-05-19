@@ -9,6 +9,7 @@ using Microsoft.Extensions.Hosting;
 using StockportGovUK.AspNetCore.Middleware;
 using StockportGovUK.AspNetCore.Availability.Middleware;
 using StockportGovUK.NetStandard.Gateways;
+using StockportGovUK.AspNetCore.Availability;
 
 namespace access_protection_service
 {
@@ -28,6 +29,7 @@ namespace access_protection_service
                     .AddNewtonsoftJson()
                     .AddMvcOptions(_ => _.AllowEmptyInputInBodyModelBinding = true);
             services.AddResilientHttpClients<IGateway, Gateway>(Configuration);
+            services.AddAvailability();
             services.AddSwagger();
             services.AddHealthChecks()
                     .AddCheck<TestHealthCheck>("TestHealthCheck");               
